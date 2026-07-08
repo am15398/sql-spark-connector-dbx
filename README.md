@@ -1,52 +1,39 @@
-# SQL Spark Connector for Databricks Runtime 17.3 LTS (Community Fork)
+# Apache Spark SQL Server Connector for Databricks Runtime 17.3 LTS
 
-> Community-maintained fork of the Microsoft SQL Spark Connector updated for **Databricks Runtime 17.3 LTS**, **Apache Spark 4.0.0**, **Scala 2.13**, and **Java 17**.
+> Community-maintained compatibility fork of the archived Microsoft SQL Spark Connector, updated for **Databricks Runtime 17.3 LTS**, **Apache Spark 4.0.0**, **Scala 2.13**, and **Java 17**.
 
----
-
-## Overview
-
-The original **Microsoft SQL Spark Connector** was built for earlier Apache Spark releases and has since been archived by Microsoft.
-
-Modern Databricks runtimes introduced several internal Spark API changes that prevent the original connector from compiling or running without modifications.
-
-This repository provides a community-maintained compatibility fork that has been updated to support:
-
-- Databricks Runtime 17.3 LTS
-- Apache Spark 4.0.0
-- Scala 2.13
-- Java 17
-- Microsoft JDBC Driver 12.8.2
-
-The goal is to help developers and organizations continue using the SQL Server Bulk Copy connector on modern Databricks runtimes.
+![Databricks](https://img.shields.io/badge/Databricks-17.3_LTS-red)
+![Spark](https://img.shields.io/badge/Apache_Spark-4.0.0-orange)
+![Scala](https://img.shields.io/badge/Scala-2.13-blue)
+![Java](https://img.shields.io/badge/Java-17-green)
+![License](https://img.shields.io/badge/License-Apache_2.0-blue)
 
 ---
 
-# Why This Fork?
+# Overview
 
-The original Microsoft repository is archived and no longer actively maintained.
+The original **Microsoft SQL Spark Connector** has been archived and is no longer actively maintained.
 
-Several Spark internal JDBC APIs changed between Spark 3.x and Spark 4.x, making the original connector incompatible with modern Databricks runtimes.
+Recent Databricks Runtime releases introduced Spark internal API changes that make the original connector incompatible with Spark 4.x.
 
-This project updates the connector to restore compatibility with Databricks Runtime 17.3 LTS while preserving the original bulk copy functionality.
-
----
-
-# Original Microsoft Repository
-
-This project is based on the original Microsoft SQL Spark Connector.
-
-Reference:
-
-https://github.com/microsoft/sql-spark-connector
-
-All credit for the original connector implementation belongs to Microsoft.
-
-This repository only contains compatibility updates required for newer Databricks runtimes.
+This repository provides a community-maintained compatibility fork that restores support for modern Databricks runtimes while preserving the SQL Server Bulk Copy functionality.
 
 ---
 
-# Supported Runtime
+# Features
+
+- ✅ Databricks Runtime 17.3 LTS
+- ✅ Apache Spark 4.0.0
+- ✅ Scala 2.13.16
+- ✅ Java 17
+- ✅ Microsoft JDBC Driver 12.8.2
+- ✅ SQL Server Bulk Copy Support
+- ✅ Spark 4 Compatible
+- ✅ Community Maintained
+
+---
+
+# Supported Versions
 
 | Component | Version |
 |-----------|---------|
@@ -54,53 +41,73 @@ This repository only contains compatibility updates required for newer Databrick
 | Apache Spark | 4.0.0 |
 | Scala | 2.13.16 |
 | Java | 17 |
-| SQL Server JDBC Driver | 12.8.2.jre11 |
+| Microsoft JDBC Driver | 12.8.2.jre11 |
+
+---
+
+# Why This Fork?
+
+The original connector was designed for older Spark versions.
+
+Since Spark 4.0 introduced multiple JDBC API changes, the archived connector no longer builds or executes successfully on Databricks Runtime 17.3 LTS.
+
+This fork updates the connector while preserving its original design and functionality.
+
+Major compatibility updates include:
+
+- Spark 4 JDBC API migration
+- Scala 2.13 migration
+- Java 17 compatibility
+- Removal of deprecated Spark internal APIs
+- Databricks Runtime 17.3 compatibility fixes
+- Dependency updates
+
+---
+
+# Original Microsoft Repository
+
+This project is based on the archived Microsoft SQL Spark Connector.
+
+https://github.com/microsoft/sql-spark-connector
+
+All credit for the original implementation belongs to Microsoft.
+
+This repository only contains compatibility updates required for newer Databricks Runtime releases.
 
 ---
 
 # Repository Structure
 
 ```
-sql-spark-connector-dbx17.3LTS/
+sql-spark-connector-dbx17.3LTS
 │
 ├── src/
 ├── project/
 ├── samples/
+├── test/
 ├── pom.xml
-├── README.md
 ├── document.md
+├── README.md
 └── target/
 ```
 
 ---
 
-# Prebuilt JAR
-
-A prebuilt connector JAR is included in this repository.
-
-```
-17.3LTS_v4_spark-mssql-connector-1.4.0.jar
-```
-
-This JAR can be uploaded directly as a Databricks cluster library.
-
----
-
-# Building
-
-Requirements
+# Build Requirements
 
 - Java 17
 - Maven 3.9+
 - Scala 2.13
 
-Build:
+---
+
+# Build
 
 ```bash
 mvn clean package -DskipTests
 ```
 
-Generated JAR:
+Generated artifact:
 
 ```
 target/spark-mssql-connector-1.4.0.jar
@@ -110,17 +117,15 @@ target/spark-mssql-connector-1.4.0.jar
 
 # Databricks Installation
 
-1. Remove any previous SQL Spark Connector JARs from the cluster.
+Upload the generated connector JAR as a cluster library.
 
-2. Upload
+Restart the cluster after installation.
+
+Example library:
 
 ```
 17.3LTS_v4_spark-mssql-connector-1.4.0.jar
 ```
-
-3. Restart the cluster.
-
-4. Use the connector normally.
 
 ---
 
@@ -130,13 +135,13 @@ target/spark-mssql-connector-1.4.0.jar
 
 ```scala
 df.write
- .format("com.microsoft.sqlserver.jdbc.spark")
- .option("url", jdbcUrl)
- .option("dbtable", "dbo.Employee")
- .option("user", username)
- .option("password", password)
- .mode("append")
- .save()
+  .format("com.microsoft.sqlserver.jdbc.spark")
+  .option("url", jdbcUrl)
+  .option("dbtable", "dbo.Employee")
+  .option("user", username)
+  .option("password", password)
+  .mode("append")
+  .save()
 ```
 
 ## Python
@@ -156,84 +161,83 @@ df.write \
 
 # Major Changes
 
-This fork includes compatibility updates for modern Databricks runtimes.
+## Build & Dependency Updates
 
-### Build Updates
-
-- Spark upgraded to **4.0.0**
-- Scala upgraded to **2.13.16**
-- Java upgraded to **17**
+- Apache Spark 4.0.0
+- Scala 2.13.16
+- Java 17
 - Updated Maven plugins
-- Updated ScalaTest
-- Updated Microsoft SQL Server JDBC Driver
-- Dependency cleanup
+- Updated Microsoft JDBC Driver
+- Updated ScalaTest dependencies
+- General dependency cleanup
 
 ---
 
-### Spark 4 Compatibility
+## Spark 4 Compatibility
 
-Updated connector implementation for Spark 4 JDBC API changes.
+Updated the connector to support Spark 4 JDBC API changes.
 
-Including:
+Examples include:
 
-- JdbcUtils.getSchema
-- JdbcUtils.schemaString
+- JdbcUtils.getSchema()
+- JdbcUtils.schemaString()
 
-Updated connector logic to match the new Spark 4 signatures.
+Connector implementations were updated to match the Spark 4 method signatures.
 
 ---
 
-### Scala 2.13 Migration
+## Scala 2.13 Migration
 
-Migrated deprecated Java/Scala collection APIs.
+Migrated deprecated collection APIs.
 
-Updated:
+From
 
-```
+```scala
 scala.collection.JavaConversions
 ```
 
-to
+To
 
-```
+```scala
 scala.jdk.javaapi.CollectionConverters
 ```
 
 ---
 
-### Databricks Runtime Compatibility
+## Databricks Runtime Compatibility
 
-Several Databricks Runtime binary incompatibilities were resolved.
+Resolved multiple binary incompatibilities introduced in recent Databricks Runtime releases.
 
-Main improvements include:
+Changes include:
 
-- Removed dependency on Spark internal `JdbcOptionsInWrite`
-- Replaced Spark internal JDBC helper methods
+- Removed dependency on Spark internal JdbcOptionsInWrite
 - Added connector-owned JDBC helper utilities
-- Added direct Microsoft SQL Server JDBC connection creation for Bulk Copy
-- Reduced dependency on Spark internal APIs that change between runtime releases
+- Updated Bulk Copy implementation
+- Updated table existence logic
+- Updated staging table cleanup
+- Reduced dependency on Spark internal APIs
 
 ---
 
-# Files Modified
+# Files Updated
 
-| File | Description |
-|------|-------------|
-| pom.xml | Spark 4 / Scala 2.13 / Java 17 upgrade |
-| SQLServerBulkJdbcOptions.scala | Removed Spark internal JdbcOptionsInWrite dependency |
-| JdbcUtils.scala | Added connector-owned JDBC helper methods |
-| BulkCopyUtils.scala | Updated Spark 4 JDBC APIs |
+| File | Purpose |
+|------|---------|
+| pom.xml | Spark 4 / Scala 2.13 / Java 17 |
+| SQLServerBulkJdbcOptions.scala | Removed internal Spark dependency |
+| JdbcUtils.scala | Added connector JDBC helpers |
+| BulkCopyUtils.scala | Spark 4 migration |
 | Connector.scala | Updated table existence logic |
 | SingleInstanceConnector.scala | Updated drop table logic |
-| ReliableSingleInstanceStrategy.scala | Updated staging table cleanup |
-| DataPoolConnector.scala | Updated connector options |
+| ReliableSingleInstanceStrategy.scala | Updated cleanup |
+| DataPoolConnector.scala | Connector option updates |
 | DataSourceUtilsTest.java | Scala 2.13 migration |
 
 ---
 
 # Validation
 
-The connector was successfully built using:
+The connector has been built using:
 
 ```bash
 mvn clean package
@@ -242,7 +246,7 @@ mvn clean package
 and
 
 ```bash
-mvn clean test
+mvn test
 ```
 
 Generated artifact:
@@ -251,82 +255,70 @@ Generated artifact:
 target/spark-mssql-connector-1.4.0.jar
 ```
 
-The generated connector JAR was validated on Databricks Runtime 17.3 LTS during development.
-
 ---
 
-# Security
+# Security Notes
 
-Security validation performed includes:
-
-- No credentials embedded inside the generated JAR.
-- Updated Microsoft JDBC Driver to 12.8.2.jre11.
-- Connector JAR is a thin JAR.
-- No Spark runtime libraries bundled.
-- No Databricks libraries bundled.
-- No passwords, tokens or JDBC URLs stored inside the artifact.
-- Connector forwards credentials only through runtime connection properties.
+- No credentials embedded in the JAR
+- Thin JAR (Spark libraries not bundled)
+- Updated Microsoft JDBC Driver
+- Compatible with Databricks Secrets
+- Supports encrypted SQL Server connections
 
 Production recommendations:
 
-- Use `encrypt=true`
-- Prefer `trustServerCertificate=false`
-- Store secrets in Databricks Secrets
-- Do not hardcode credentials
-- Keep Microsoft JDBC Driver updated
+- encrypt=true
+- trustServerCertificate=false
+- Store credentials using Databricks Secrets
 
 ---
 
-# Upgrade Notes
+# Documentation
 
-Detailed technical documentation is available in:
+Additional implementation details are available in:
 
 ```
 document.md
 ```
 
-It contains:
+Topics include:
 
-- Build changes
 - Spark 4 migration
 - Scala 2.13 migration
-- Databricks Runtime compatibility fixes
-- SQLServerBulkCopy changes
-- Security validation
+- Databricks compatibility fixes
 - Dependency updates
+- Build process
 - Deployment guidance
 
 ---
 
 # Contributing
 
-Community contributions are welcome.
+Contributions are welcome.
 
-If you validate this connector on newer Databricks runtimes or newer Spark releases, feel free to submit:
+Feel free to submit:
 
 - Pull Requests
 - Bug Reports
 - Performance Improvements
-- Documentation Updates
+- Documentation Enhancements
 
 ---
 
 # Disclaimer
 
-This project is an independent community-maintained compatibility fork.
+This is an independent community-maintained compatibility fork.
 
-It is **not affiliated with, maintained by, or officially supported by Microsoft or Databricks**.
+It is **not affiliated with, endorsed by, or supported by Microsoft or Databricks**.
 
-Please validate the connector in your own environment before using it in production.
+Always validate the connector in your own environment before deploying to production.
 
 ---
 
 # Acknowledgements
 
-Special thanks to the original Microsoft SQL Spark Connector team for creating the connector.
+Thanks to the Microsoft SQL Spark Connector team for the original implementation.
 
 Original repository:
 
 https://github.com/microsoft/sql-spark-connector
-
-This fork exists solely to maintain compatibility with modern Databricks Runtime releases after the original project was archived.
