@@ -123,9 +123,8 @@ Restart the cluster after installation.
 
 Example library:
 
-```
+
 [17.3LTS_v4_spark-mssql-connector-1.4.0.jar](https://github.com/am15398/sql-spark-connector-databricks-17.3-lts/blob/main/17.3LTS_v4_spark-mssql-connector-1.4.0.jar)
-```
 
 ---
 
@@ -277,9 +276,8 @@ Production recommendations:
 
 Additional implementation details are available in:
 
-```
 [sql-spark-connector-dbx17.3LTS/17.4_lts_release_note.md](https://github.com/am15398/sql-spark-connector-databricks-17.3-lts/blob/main/sql-spark-connector-dbx17.3LTS/17.4_lts_release_note.md)
-```
+
 
 Topics include:
 
